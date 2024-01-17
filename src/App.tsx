@@ -1,25 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Navbar from './layouts/header-footer/Navbar';
+import Footer from './layouts/header-footer/Footer';
+import HomePage from './layouts/homepage/HomePage';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import About from './layouts/about/about';
+import BookDetail from './layouts/product/BookDetail';
+import Register from './layouts/user/Register';
+import ActiveAccount from './layouts/user/ActiveAccount';
 
 function App() {
+  const [keyword, setKeyword] = useState<string>('');
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Navbar keyword={keyword} setKeyword={setKeyword} />
+        <Routes>
+          <Route path="/" element={<HomePage keyword={keyword} />} />
+          <Route path="/:categoryId" element={<HomePage keyword={keyword} />} />
+          <Route path="/book/:bookId" element={<BookDetail />} />
+          <Route path="/about" element={<About />} />
+          <Route  path="/register" element={<Register />}/>
+          <Route path ="/active/:email/:activeCode" element={<ActiveAccount />}/>
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </>
   );
 }
 
