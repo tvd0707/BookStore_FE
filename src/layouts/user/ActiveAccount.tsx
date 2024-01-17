@@ -8,24 +8,38 @@ function ActiveAccount() {
     const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
+        const handleActived = async () => {
+            try {
+                const url: string = `http://localhost:8080/account/active?email=${email}&activeCode=${activeCode}`;
+                const response = await fetch(url, { method: "GET" });
+                if (response.ok) {
+                    setIsActived(true);
+                } else {
+                    setMessage(response.text + "");
+                }
+            } catch (error) {
+                console.log("Lỗi khi kích hoạt: ", error);
+            }
+        }
+
         if (email && activeCode) {
             handleActived();
         }
-    }, []);
+    }, [activeCode, email]);
 
-    const handleActived = async () => {
-        try {
-            const url: string = `http://localhost:8080/account/active?email=${email}&activeCode=${activeCode}`;
-            const response = await fetch(url, { method: "GET" });
-            if (response.ok) {
-                setIsActived(true);
-            } else {
-                setMessage(response.text + "");
-            }
-        } catch (error) {
-            console.log("Lỗi khi kích hoạt: ", error);
-        }
-    }
+    // const handleActived = async () => {
+    //     try {
+    //         const url: string = `http://localhost:8080/account/active?email=${email}&activeCode=${activeCode}`;
+    //         const response = await fetch(url, { method: "GET" });
+    //         if (response.ok) {
+    //             setIsActived(true);
+    //         } else {
+    //             setMessage(response.text + "");
+    //         }
+    //     } catch (error) {
+    //         console.log("Lỗi khi kích hoạt: ", error);
+    //     }
+    // }
 
     return (
         <div>
