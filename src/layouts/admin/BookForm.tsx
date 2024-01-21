@@ -1,5 +1,6 @@
 import { useState, FormEvent } from 'react';
 import BookModel from '../../models/BookModel';
+import RequireAdmin from './RequireAdmin';
 
 function BookForm() {
     const [book, setBook] = useState<BookModel>({
@@ -127,4 +128,5 @@ function BookForm() {
     )
 }
 
-export default BookForm;
+const BookForm_Admin = RequireAdmin(BookForm);
+export default BookForm_Admin;

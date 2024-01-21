@@ -8,6 +8,7 @@ function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [gender, setGender] = useState("");
+    const [avatar, setAvatar] = useState<File | null>(null);
 
     const [message, setMessage] = useState("");
 
@@ -16,8 +17,23 @@ function Register() {
     const [invalidPassword, setInvalidPassword] = useState("");
     const [invalidConfirmPassword, setInvalidConfirmPassword] = useState("");
 
+    const getBase64 = (file: File): Promise<string | null> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result ? (reader.result as string).split(',')[1] : null);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setAvatar(e.target.files[0]);
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
-        if(gender === "") {
+        if (gender === "") {
             setGender("O");
         }
 
@@ -36,6 +52,7 @@ function Register() {
         const isConfirmPasswordValid = !checkValidConfirmPassword(confirmPassword);
 
         if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid) {
+            const avatarBase64 = avatar ? await getBase64(avatar) : null;
             try {
                 const url = "http://localhost:8080/account/register";
                 const response = await fetch(url, {
@@ -52,12 +69,13 @@ function Register() {
                         phone: phone,
                         gender: gender,
                         actived: 0,
-                        activeCode: ""
+                        activeCode: "",
+                        avatar: avatarBase64,
                     })
                 }
                 );
 
-                if(response.ok) {
+                if (response.ok) {
                     setMessage("Đăng ký thành công!");
                 } else {
                     setMessage("Xảy ra lỗi trong quá trình đăng ký tài khoản!");
@@ -215,6 +233,18 @@ function Register() {
                         <label htmlFor='email' className='form-label'>Email</label>
                         <input type='email' className='form-control' id='email' value={email} onChange={handleEmailChange} />
                         <div style={{ color: "red" }}>{invalidEmail}</div>
+                    </div>
+
+                    {/* avatar */}
+                    <div className="mb-3">
+                        <label htmlFor="avatar" className="form-label">Avatar</label>
+                        <input
+                            type="file"
+                            id="avatar"
+                            className="form-control"
+                            accept="images/*"
+                            onChange={handleAvatarChange}
+                        />
                     </div>
 
                     {/* submit */}

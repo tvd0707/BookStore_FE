@@ -11,6 +11,7 @@ import ActiveAccount from './layouts/user/ActiveAccount';
 import Login from './layouts/user/Login';
 import Test from './layouts/user/Test';
 import BookForm from './layouts/admin/BookForm';
+import Error403 from "./error/Error403";
 
 function App() {
   const [keyword, setKeyword] = useState<string>('');
@@ -28,6 +29,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={<Test />} />
           <Route path="/admin/add-book" element={<BookForm />} />
+          <Route path="/error-403" element={<Error403 />} />
         </Routes>
         <Footer />
       </BrowserRouter>
